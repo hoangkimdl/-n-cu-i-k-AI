@@ -193,7 +193,27 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 ![Beam Demo](images/beam.gif)
 
 ---
+### 🔹 A* (A-Star Search)
 
+✅ Nguyên lý hoạt động:
+- A* là thuật toán tìm kiếm có thông tin, mở rộng node theo hàm đánh giá: f(n) = g(n) + h(n)
+  - g(n): chi phí từ trạng thái ban đầu đến node n
+  - h(n): ước lượng chi phí từ node n đến goal (heuristic)
+- Kết hợp lợi ích của Uniform Cost Search và Greedy Best-First Search.
+
+📊 Ưu – Nhược điểm:
+
+| Ưu điểm                      | Nhược điểm                            |
+|------------------------------|----------------------------------------|
+| Tìm được lời giải tối ưu     | Yêu cầu heuristic tốt và admissible   |
+| Hiệu quả nếu h(n) chính xác  | Tốn nhiều bộ nhớ hơn IDS hoặc UCS     |
+| Linh hoạt với nhiều loại bài toán | Hiệu suất phụ thuộc vào h(n)      |
+
+🎬 Hình ảnh minh họa:
+
+![A* Demo](images/astar.gif)
+
+---
 ### 🔹 IDA* (Iterative Deepening A*)
 
 ✅ Nguyên lý hoạt động:
