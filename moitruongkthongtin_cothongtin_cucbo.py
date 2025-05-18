@@ -449,12 +449,15 @@ class PuzzleSolverUI:
         return path if current == goal else None
 
     def simulated_annealing(self, start, goal):
-        current = start
+        current = [row[:] for row in start]  # Sao chép trạng thái ban đầu
         path = [current]
-        T = 1000.0
-        alpha = 0.99
-        min_T = 0.01
-        max_iterations = 2000
+        T = 2000.0  # Tăng nhiệt độ ban đầu để có nhiều cơ hội khám phá
+        alpha = 0.9  # Giảm nhiệt độ chậm hơn nữa
+        min_T = 0.5  # Duy trì nhiệt độ tối thiểu cao hơn để tăng khả năng chấp nhận bước xấu
+        max_iterations = 10000  # Tăng số vòng lặp tối đa để đảm bảo tìm được lời giải
+
+        target_empty_pos = [(i, j) for i in range(3) for j in range(3) if goal[i][j] == 0][0]  # Vị trí ô trống mục tiêu (2,2)
+
         for i in range(max_iterations):
             if not self.is_running:
                 return None
@@ -462,15 +465,37 @@ class PuzzleSolverUI:
                 return path
             if T < min_T:
                 break
+
+            # Lấy các trạng thái lân cận
             neighbors = self.get_neighbors(current)
             if not neighbors:
                 break
-            next_state = random.choice(neighbors)
+
+            # Tìm vị trí ô trống hiện tại
+            current_empty_pos = [(i, j) for i in range(3) for j in range(3) if current[i][j] == 0][0]
+            # Ưu tiên lân cận di chuyển ô trống gần mục tiêu hơn (dựa trên khoảng cách Manhattan đến (2,2))
+            neighbors_with_distance = []
+            for neighbor in neighbors:
+                neighbor_empty_pos = [(i, j) for i in range(3) for j in range(3) if neighbor[i][j] == 0][0]
+                dist = abs(neighbor_empty_pos[0] - target_empty_pos[0]) + abs(neighbor_empty_pos[1] - target_empty_pos[1])
+                neighbors_with_distance.append((neighbor, dist))
+
+            # Sắp xếp theo khoảng cách đến vị trí ô trống mục tiêu
+            neighbors_with_distance.sort(key=lambda x: x[1])
+            # Chọn ngẫu nhiên từ 3 trạng thái tốt nhất (hoặc tất cả nếu ít hơn)
+            top_neighbors = neighbors_with_distance[:min(3, len(neighbors_with_distance))]
+            next_state, _ = random.choice(top_neighbors) if top_neighbors else (random.choice(neighbors), 0)
+
+            # Tính delta_E dựa trên heuristic
             delta_E = self.heuristic(next_state, goal) - self.heuristic(current, goal)
+            # Chấp nhận trạng thái mới nếu tốt hơn hoặc theo xác suất
             if delta_E <= 0 or random.random() < math.exp(-delta_E / max(T, 1e-10)):
                 current = next_state
                 path.append(current)
+
+            # Giảm nhiệt độ
             T *= alpha
+
         return path if current == goal else None
 
     def beam_search(self, start, goal, beam_width=5):
