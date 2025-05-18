@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from collections import deque
+import time
 
 # ===================== AND-OR SEARCH (Single State) =====================
 def and_or_search(start, goal, max_depth=50):
@@ -47,8 +48,11 @@ def and_or_search(start, goal, max_depth=50):
             plan.extend(result[1:] if plan else result)
         return plan
 
+    start_time = time.perf_counter()
     final_plan = evaluate_or(start, [], 0)
-    return (final_plan, expansions) if final_plan else (None, expansions)
+    end_time = time.perf_counter()
+    computation_time = end_time - start_time
+    return (final_plan, expansions, computation_time) if final_plan else (None, expansions, computation_time)
 
 # ===================== BELIEF SEARCH (Multiple States) =====================
 def manhattan_distance(state, goal):
@@ -66,7 +70,7 @@ def is_valid_state(state):
 
 def and_or_belief_search(b_initial_set, goal_state, max_depth=200):
     if not b_initial_set:
-        return set(), None, 0
+        return set(), None, 0, 0.0
 
     b_initial = {state: 1.0 / len(b_initial_set) for state in b_initial_set}
     expansions = 0
@@ -98,6 +102,7 @@ def and_or_belief_search(b_initial_set, goal_state, max_depth=200):
         total = sum(belief.values())
         return {k: v / total for k, v in belief.items()} if total > 0 else belief
 
+    start_time = time.perf_counter()
     queue = deque([(b_initial, [next(iter(b_initial))], 0)])
     while queue:
         belief, path, depth = queue.popleft()
@@ -109,7 +114,9 @@ def and_or_belief_search(b_initial_set, goal_state, max_depth=200):
         possible_beliefs.add(belief_key)
 
         if is_goal_belief(belief):
-            return possible_beliefs, path, expansions
+            end_time = time.perf_counter()
+            computation_time = end_time - start_time
+            return possible_beliefs, path, expansions, computation_time
 
         if depth >= max_depth:
             continue
@@ -121,7 +128,9 @@ def and_or_belief_search(b_initial_set, goal_state, max_depth=200):
         if next_state not in path and is_valid_state(next_state):
             queue.append((updated_belief, path + [next_state], depth + 1))
 
-    return possible_beliefs, None, expansions
+    end_time = time.perf_counter()
+    computation_time = end_time - start_time
+    return possible_beliefs, None, expansions, computation_time
 
 # ===================== GUI =====================
 class UnifiedPuzzleApp:
@@ -242,25 +251,25 @@ class UnifiedPuzzleApp:
             start = self.get_grid_state(self.initial_state_entries)
             if not start:
                 return
-            path, expansions = and_or_search(start, goal)
+            path, expansions, computation_time = and_or_search(start, goal)
             if path:
                 for idx, state in enumerate(path):
                     self.display_state(state, idx)
-            messagebox.showinfo("Done", f"Expansions: {expansions}")
+            messagebox.showinfo("Done", f"Expansions: {expansions}\nComputation Time: {computation_time:.4f}s")
 
         else:
             try:
                 states = eval(self.initial_states_text.get("1.0", tk.END).strip())
                 if not isinstance(states, list) or not all(isinstance(s, tuple) and len(s) == 9 for s in states):
                     raise ValueError
-                beliefs, path, expansions = and_or_belief_search(set(states), goal)
+                beliefs, path, expansions, computation_time = and_or_belief_search(set(states), goal)
                 if path:
                     for idx, state in enumerate(path):
                         self.display_state(state, idx)
                 else:
                     messagebox.showinfo("Result", "No solution found.")
                 self.display_beliefs(beliefs)
-                messagebox.showinfo("Done", f"Expansions: {expansions}\nBeliefs found: {len(beliefs)}")
+                messagebox.showinfo("Done", f"Expansions: {expansions}\nComputation Time: {computation_time:.4f}s\nBeliefs found: {len(beliefs)}")
             except Exception as e:
                 messagebox.showerror("Error", f"Invalid initial states format\n{e}")
 
@@ -279,7 +288,6 @@ class UnifiedPuzzleApp:
                 e.pack(side=tk.LEFT, padx=1, pady=1)
 
     def display_beliefs(self, possible_beliefs):
-        # possible_beliefs là set các frozenset chứa các belief (state, prob)
         frame = tk.Frame(self.result_inner, bg="#F0F8FF", bd=1, relief=tk.SOLID)
         frame.pack(pady=5)
         tk.Label(frame, text="Các belief đã duyệt:", font=("Segoe UI", 10, "bold"), bg="#F0F8FF").pack()
