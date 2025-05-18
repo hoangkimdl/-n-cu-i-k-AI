@@ -98,7 +98,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 | Đảm bảo tìm được lời giải ngắn nhất | Tốn bộ nhớ rất lớn                         |
 | Dễ cài đặt                        | Không hiệu quả cho không gian tìm kiếm rộng |
 
-![BFS Demo](images/8PuzzleSolver-BFS)
+![BFS Demo](images/8PuzzleSolver-BFS.gif)
 ---
 
 #### 🔹 Depth-First Search (DFS)
@@ -115,7 +115,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 | Ít tốn bộ nhớ hơn BFS  | Có thể không tìm được lời giải  |
 | Dễ cài đặt bằng đệ quy | Không tối ưu, dễ kẹt nhánh sai   |
 
-![DFS Demo](images/8PuzzleSolver-DFS)
+![DFS Demo](images/8PuzzleSolver-DFS.gif)
 ---
 
 #### 🔹 Iterative Deepening Search (IDS)
@@ -134,7 +134,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![IDS Demo](images/8PuzzleSolver-IDS)
+![IDS Demo](images/8PuzzleSolver-IDS.gif)
 
 ---
 
@@ -154,7 +154,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![UCS Demo](images/8PuzzleSolver-UCS)
+![UCS Demo](images/8PuzzleSolver-UCS.gif)
 
 ---
 ### 🔹 Greedy Best-First Search
@@ -173,7 +173,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Greedy Demo](images/8PuzzleSolver-GreedySearch)
+![Greedy Demo](images/8PuzzleSolver-GreedySearch.gif)
 
 ---
 
@@ -192,7 +192,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Beam Demo](images/8PuzzleSolver-BEAMSEARCH)
+![Beam Demo](images/8PuzzleSolver-BEAMSEARCH.gif)
 
 ---
 ### 🔹 A* (A-Star Search)
@@ -213,10 +213,10 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![A* Demo](images/8PuzzleSolver-A-STAR)
+![A* Demo](images/8PuzzleSolver-A-STAR.gif)
 
 ---
-### 🔹 IDA* (Iterative Deepening A*)
+### 🔹 IDA* (Iterative Deepening A*.gif)
 
 ✅ Nguyên lý hoạt động:
 - Kết hợp A* với DFS giới hạn theo hàm f(n) = g(n) + h(n).
@@ -232,7 +232,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![IDA* Demo](images/8PuzzleSolver-IDA)
+![IDA* Demo](images/8PuzzleSolver-IDA.gif)
 ---
 ### 🔹 Simple Hill Climbing
 
@@ -249,7 +249,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Simple Hill](images/8PuzzleSolver-SIMPLEHILL)
+![Simple Hill](images/8PuzzleSolver-SIMPLEHILL.gif)
 
 ---
 
@@ -267,7 +267,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Steepest Hill](images/8PuzzleSolver-STEEPESTHILL)
+![Steepest Hill](images/8PuzzleSolver-STEEPESTHILL.gif)
 
 ---
 
@@ -286,7 +286,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Stochastic Hill](images/8PuzzleSolver-STOCHASTICHILL)
+![Stochastic Hill](images/8PuzzleSolver-STOCHASTICHILL.gif)
 
 ---
 
@@ -305,7 +305,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Annealing](images/8PuzzleSolver-STIMULATED)
+![Annealing](images/8PuzzleSolver-STIMULATED.gif)
 
 ---
 
@@ -327,7 +327,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Genetic Algorithm](images/8PuzzleSolver-GENETIC)
+![Genetic Algorithm](images/8PuzzleSolver-GENETIC.gif)
 
 ---
 
@@ -348,7 +348,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Q Learning](images/8PuzzleSolver-Q-LEARNING)
+![Q Learning](images/8PuzzleSolver-Q-LEARNING.gif)
 
 ---
 #### 🔶 Tìm kiếm trong môi trường phức tạp (Uncertain / Partially Observable)
@@ -370,7 +370,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![AND-OR Search](images/8PuzzleSolver-AND-ORSEARCH)
+![AND-OR Search](images/8PuzzleSolver-AND-ORSEARCH.gif)
 
 ---
 
@@ -390,7 +390,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Belief Search](images/8PuzzleSolver-BELIEF-SEARCH)
+![Belief Search](images/8PuzzleSolver-BELIEF-SEARCH.gif)
 
 ---
 
