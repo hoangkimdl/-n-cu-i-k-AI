@@ -4,9 +4,9 @@ from moitruongkthongtin_cothongtin_cucbo import PuzzleSolverUI
 from moitruongphuctap import UnifiedPuzzleApp
 import os
 import subprocess
-import webbrowser
 import pandas as pd
-import json
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class MainInterface:
     def __init__(self, root):
@@ -74,7 +74,7 @@ class MainInterface:
     def open_compare_window(self):
         compare_window = tk.Toplevel(self.root)
         compare_window.title("Compare Algorithms")
-        compare_window.geometry("400x200")
+        compare_window.geometry("900x600")
         compare_window.configure(bg="#e0e7ff")
 
         compare_frame = tk.Frame(compare_window, bg="#ffffff", bd=0, relief=tk.FLAT)
@@ -100,7 +100,7 @@ class MainInterface:
             fg="white",
             width=30,
             height=2,
-            command=self.generate_and_show_charts
+            command=lambda: self.generate_and_show_charts(compare_frame)
         ).pack(pady=10)
 
     def open_excel(self):
@@ -115,7 +115,12 @@ class MainInterface:
         else:
             messagebox.showwarning("Warning", "No puzzle_results.xlsx file found. Run an algorithm first to generate data.")
 
-    def generate_and_show_charts(self):
+    def generate_and_show_charts(self, parent_frame):
+        # Clear any existing charts in the parent frame
+        for widget in parent_frame.winfo_children():
+            if isinstance(widget, tk.Frame) and widget != parent_frame:
+                widget.destroy()
+
         if not os.path.exists("puzzle_results.xlsx"):
             messagebox.showwarning("Warning", "No puzzle_results.xlsx file found. Run an algorithm first to generate data.")
             return
@@ -130,93 +135,79 @@ class MainInterface:
             messagebox.showerror("Error", f"Failed to read Excel file: {str(e)}")
             return
 
-        # Prepare data for Chart.js
-        chart_data = {
-            "algorithms": algorithms,
-            "times": times,
-            "steps": steps
-        }
+        # Đổi tên hiển thị cho thuật toán nếu muốn
+        display_names = []
+        for name in algorithms:
+            if name.lower() == "bfs":
+                display_names.append("Breadth-First Search")
+            elif name.lower() == "dfs":
+                display_names.append("Depth-First Search")
+            elif name.lower() == "ids":
+                display_names.append("Iterative Deepening")
+            elif name.lower() == "ucs":
+                display_names.append("Uniform Cost Search")
+            elif name.lower() == "greedy search":
+                display_names.append("Greedy Search")
+            elif name.lower() == "ida":
+                display_names.append("IDA*")
+            elif name.lower() == "a*":
+                display_names.append("A* Search")
+            elif name.lower() == "simple hill":
+                display_names.append("Simple Hill Climbing")
+            elif name.lower() == "steepest hill":
+                display_names.append("Steepest Hill Climbing")
+            elif name.lower() == "stochastic hill":
+                display_names.append("Stochastic Hill Climbing")
+            elif name.lower() == "simulated anneal":
+                display_names.append("Simulated Annealing")
+            elif name.lower() == "beam search":
+                display_names.append("Beam Search")
+            elif name.lower() == "genetic algo":
+                display_names.append("Genetic Algorithm")
+            elif name.lower() == "q-learning":
+                display_names.append("Q-Learning")
+            elif name.lower() == "and-or search":
+                display_names.append("AND-OR Search")
+            elif name.lower() == "belief search":
+                display_names.append("Belief Search")
+            else:
+                display_names.append(name)
 
-        # Generate HTML content with embedded data
-        html_content = f"""
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Algorithm Comparison Charts</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {{ font-family: Arial, sans-serif; background-color: #f0f4f8; }}
-        .chart-container {{ width: 90%; margin: 20px auto; }}
-    </style>
-</head>
-<body>
-    <div class="chart-container">
-        <canvas id="timeChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <canvas id="stepsChart"></canvas>
-    </div>
-    <script>
-        const chartData = {json.dumps(chart_data)};
+        # Create a frame to hold the charts
+        chart_frame = tk.Frame(parent_frame, bg="#ffffff")
+        chart_frame.pack(fill=tk.BOTH, expand=True)
 
-        // Time Chart
-        const timeCtx = document.getElementById('timeChart').getContext('2d');
-        new Chart(timeCtx, {{
-            type: 'bar',
-            data: {{
-                labels: chartData.algorithms,
-                datasets: [{{
-                    label: 'Time (s)',
-                    data: chartData.times,
-                    backgroundColor: 'rgba(76, 175, 80, 0.6)',
-                    borderColor: 'rgba(76, 175, 80, 1)',
-                    borderWidth: 1
-                }}]
-            }},
-            options: {{
-                scales: {{
-                    y: {{ beginAtZero: true, title: {{ display: true, text: 'Time (s)' }} }},
-                    x: {{ title: {{ display: true, text: 'Algorithm' }}, ticks: {{ autoSkip: false, maxRotation: 45, minRotation: 45 }} }}
-                }},
-                plugins: {{ title: {{ display: true, text: 'Comparison of Algorithm Execution Time' }} }}
-            }}
-        }});
+        # Plot Time Comparison
+        fig1, ax1 = plt.subplots(figsize=(max(8, len(display_names)*0.7), 3))
+        ax1.bar(display_names, times, color="skyblue")
+        ax1.set_xlabel("Algorithm")
+        ax1.set_ylabel("Time (s)")
+        ax1.set_title("Comparison of Algorithm Execution Time")
+        ax1.set_xticks(range(len(display_names)))
+        ax1.set_xticklabels(display_names, rotation=30, ha='right')
 
-        // Steps/Expansions Chart
-        const stepsCtx = document.getElementById('stepsChart').getContext('2d');
-        new Chart(stepsCtx, {{
-            type: 'bar',
-            data: {{
-                labels: chartData.algorithms,
-                datasets: [{{
-                    label: 'Steps/Expansions',
-                    data: chartData.steps,
-                    backgroundColor: 'rgba(33, 150, 243, 0.6)',
-                    borderColor: 'rgba(33, 150, 243, 1)',
-                    borderWidth: 1
-                }}]
-            }},
-            options: {{
-                scales: {{
-                    y: {{ beginAtZero: true, title: {{ display: true, text: 'Steps/Expansions' }} }},
-                    x: {{ title: {{ display: true, text: 'Algorithm' }}, ticks: {{ autoSkip: false, maxRotation: 45, minRotation: 45 }} }}
-                }},
-                plugins: {{ title: {{ display: true, text: 'Comparison of Algorithm Steps/Expansions' }} }}
-            }}
-        }});
-    </script>
-</body>
-</html>
-        """
+        plt.tight_layout()
 
-        # Save the HTML file
-        try:
-            with open("algorithm_comparison.html", "w", encoding="utf-8") as f:
-                f.write(html_content)
-            webbrowser.open("algorithm_comparison.html")
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to generate charts: {str(e)}")
+        # Embed the time chart into the Tkinter window
+        canvas1 = FigureCanvasTkAgg(fig1, master=chart_frame)
+        canvas1.draw()
+        canvas1.get_tk_widget().pack(pady=10)
+
+        # Plot Steps/Expansions Comparison
+        fig2, ax2 = plt.subplots(figsize=(max(8, len(display_names)*0.7), 3))
+        ax2.bar(display_names, steps, color="lightgreen")
+        ax2.set_xlabel("Algorithm")
+        ax2.set_ylabel("Steps/Expansions")
+        ax2.set_title("Comparison of Algorithm Steps/Expansions")
+        ax2.set_xticks(range(len(display_names)))
+        ax2.set_xticklabels(display_names, rotation=30, ha='right')
+
+        plt.tight_layout()
+
+        # Embed the steps chart into the Tkinter window
+        canvas2 = FigureCanvasTkAgg(fig2, master=chart_frame)
+        canvas2.draw()
+        canvas2.get_tk_widget().pack(pady=10)
 
 if __name__ == "__main__":
     root = tk.Tk()
