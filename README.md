@@ -39,10 +39,6 @@ Bài toán 8 puzzle là một trò chơi giải đố gồm 8 ô số và 1 ô t
 1 2 3
 4 5 6
 7 8 _
-
-yaml
-Sao chép
-Chỉnh sửa
 - **Chi phí (path cost)**: mỗi bước di chuyển có chi phí = 1.
 
 #### 🎯 Bài toán đặt ra:
