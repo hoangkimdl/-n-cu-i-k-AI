@@ -98,6 +98,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 | Đảm bảo tìm được lời giải ngắn nhất | Tốn bộ nhớ rất lớn                         |
 | Dễ cài đặt                        | Không hiệu quả cho không gian tìm kiếm rộng |
 
+![BFS Demo](images/8PuzzleSolver-BFS)
 ---
 
 #### 🔹 Depth-First Search (DFS)
@@ -114,6 +115,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 | Ít tốn bộ nhớ hơn BFS  | Có thể không tìm được lời giải  |
 | Dễ cài đặt bằng đệ quy | Không tối ưu, dễ kẹt nhánh sai   |
 
+![DFS Demo](images/8PuzzleSolver-DFS)
 ---
 
 #### 🔹 Iterative Deepening Search (IDS)
@@ -132,7 +134,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![IDS Demo](images/ids.gif)
+![IDS Demo](images/8PuzzleSolver-IDS)
 
 ---
 
@@ -152,7 +154,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![UCS Demo](images/ucs.gif)
+![UCS Demo](images/8PuzzleSolver-UCS)
 
 ---
 ### 🔹 Greedy Best-First Search
@@ -171,7 +173,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Greedy Demo](images/greedy.gif)
+![Greedy Demo](images/8PuzzleSolver-GreedySearch)
 
 ---
 
@@ -190,7 +192,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Beam Demo](images/beam.gif)
+![Beam Demo](images/8PuzzleSolver-BEAMSEARCH)
 
 ---
 ### 🔹 A* (A-Star Search)
@@ -211,7 +213,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![A* Demo](images/astar.gif)
+![A* Demo](images/8PuzzleSolver-A-STAR)
 
 ---
 ### 🔹 IDA* (Iterative Deepening A*)
@@ -230,7 +232,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![IDA* Demo](images/idastar.gif)
+![IDA* Demo](images/8PuzzleSolver-IDA)
 ---
 ### 🔹 Simple Hill Climbing
 
@@ -247,7 +249,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Simple Hill](images/simple_hill.gif)
+![Simple Hill](images/8PuzzleSolver-SIMPLEHILL)
 
 ---
 
@@ -265,7 +267,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Steepest Hill](images/steepest_hill.gif)
+![Steepest Hill](images/8PuzzleSolver-STEEPESTHILL)
 
 ---
 
@@ -284,7 +286,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Stochastic Hill](images/stochastic_hill.gif)
+![Stochastic Hill](images/8PuzzleSolver-STOCHASTICHILL)
 
 ---
 
@@ -303,7 +305,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Annealing](images/annealing.gif)
+![Annealing](images/8PuzzleSolver-STIMULATED)
 
 ---
 
@@ -325,7 +327,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Genetic Algorithm](images/genetic.gif)
+![Genetic Algorithm](images/8PuzzleSolver-GENETIC)
 
 ---
 
@@ -346,7 +348,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Q Learning](images/qlearning.gif)
+![Q Learning](images/8PuzzleSolver-Q-LEARNING)
 
 ---
 #### 🔶 Tìm kiếm trong môi trường phức tạp (Uncertain / Partially Observable)
@@ -368,7 +370,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![AND-OR Search](images/andor.gif)
+![AND-OR Search](images/8PuzzleSolver-AND-ORSEARCH)
 
 ---
 
@@ -388,7 +390,7 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 
 🎬 Hình ảnh minh họa:
 
-![Belief Search](images/belief.gif)
+![Belief Search](images/8PuzzleSolver-BELIEF-SEARCH)
 
 ---
 
@@ -449,10 +451,6 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 | Dễ cài đặt và trực quan         | Dễ bị "nổ" tổ hợp khi biến nhiều        |
 | Hiệu quả nếu kết hợp ràng buộc  | Không tối ưu nếu không tối giản trước   |
 
-🎬 Hình ảnh minh họa:
-
-![Backtracking](images/backtracking.gif)
-
 ---
 
 ### 🔹 AC-3 Algorithm (Arc Consistency)
@@ -468,10 +466,6 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 |--------------------------------------|-----------------------------------------|
 | Giảm đáng kể số node khi backtracking | Không tự giải CSP hoàn toàn             |
 | Tăng hiệu quả khi dùng trước khi tìm kiếm | Tốn thời gian với mạng ràng buộc lớn |
-
-🎬 Hình ảnh minh họa:
-
-![AC-3](images/ac3.gif)
 
 ---
 
@@ -489,10 +483,6 @@ Tìm một chuỗi các hành động từ trạng thái ban đầu đến trạ
 | Giúp phát hiện lỗi logic trong thuật toán | Tốn thời gian tạo test case chất lượng       |
 | Hỗ trợ đánh giá hiệu suất thực tế       | Không thể bao phủ mọi trường hợp phức tạp    |
 | Có thể tự động hóa bằng khung kiểm thử  | Cần thiết kế test có ý nghĩa và đa dạng      |
-
-🎬 Hình ảnh minh họa:
-
-![Testing Algorithm](images/testing.gif)
 
 ---
 ## 📂 Thư mục ảnh minh họa
