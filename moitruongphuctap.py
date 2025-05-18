@@ -2,10 +2,16 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 from collections import deque
 import time
+from utils import save_to_excel  # Import shared Excel saving function
 
-# ===================== AND-OR SEARCH (Single State) =====================
+# Temporary list to store results before saving
+results = []
+
+# AND-OR Search for single state in complex environments
 def and_or_search(start, goal, max_depth=50):
+    """AND-OR Search algorithm for a single state in a complex environment."""
     expansions = 0
+
     def is_goal(state):
         return state == goal
 
@@ -54,8 +60,9 @@ def and_or_search(start, goal, max_depth=50):
     computation_time = end_time - start_time
     return (final_plan, expansions, computation_time) if final_plan else (None, expansions, computation_time)
 
-# ===================== BELIEF SEARCH (Multiple States) =====================
+# Belief Search for multiple states
 def manhattan_distance(state, goal):
+    """Calculate the Manhattan distance between two states."""
     distance = 0
     for i in range(9):
         if state[i] == 0:
@@ -66,9 +73,11 @@ def manhattan_distance(state, goal):
     return distance
 
 def is_valid_state(state):
+    """Check if a state is valid (contains numbers 0-8 exactly once)."""
     return sorted(state) == list(range(9))
 
 def and_or_belief_search(b_initial_set, goal_state, max_depth=200):
+    """Belief Search algorithm for multiple possible states."""
     if not b_initial_set:
         return set(), None, 0, 0.0
 
@@ -132,19 +141,18 @@ def and_or_belief_search(b_initial_set, goal_state, max_depth=200):
     computation_time = end_time - start_time
     return possible_beliefs, None, expansions, computation_time
 
-# ===================== GUI =====================
 class UnifiedPuzzleApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("8-Puzzle Solver (AND-OR & Belief Search)")
+        self.root.title("8-Puzzle Solver (Complex Environment)")
         self.root.geometry("1200x700")
         self.root.configure(bg="#E6E6FA")
-
         self.mode_var = tk.StringVar(value="AND-OR Search")
         self.create_widgets()
 
     def create_widgets(self):
-        # Top frame: chọn thuật toán
+        """Create the UI widgets for the application."""
+        # Top frame for algorithm selection
         top_frame = tk.Frame(self.root, bg="#E6E6FA")
         top_frame.pack(pady=10)
 
@@ -153,30 +161,34 @@ class UnifiedPuzzleApp:
         algo_menu.pack(side=tk.LEFT, padx=5)
         algo_menu.bind("<<ComboboxSelected>>", self.toggle_mode)
 
-        # Frame nhập trạng thái ban đầu
+        # Frame for initial state(s) input
         self.input_frame = tk.LabelFrame(self.root, text="Initial State(s)", font=("Segoe UI", 12, "bold"), bg="#E6E6FA")
-        self.input_frame.pack(pady=5)
+        self.input_frame.pack(pady=5, padx=10, fill=tk.X)
         self.initial_state_entries = self.create_grid(self.input_frame)
 
-        # Text hướng dẫn cho Belief Search
-        self.belief_hint = tk.Label(self.input_frame, text="Nhập danh sách các trạng thái, ví dụ: [(1,2,3,4,5,6,0,7,8), ...]", font=("Segoe UI", 10), bg="#E6E6FA", fg="#555")
+        # Belief Search input field
+        self.belief_hint = tk.Label(self.input_frame, text="Enter list of states, e.g., [(1,2,3,4,5,6,0,7,8), ...]", font=("Segoe UI", 10), bg="#E6E6FA", fg="#555")
         self.initial_states_text = tk.Text(self.input_frame, height=3, width=60, font=("Segoe UI", 10))
         self.belief_hint.pack_forget()
         self.initial_states_text.pack_forget()
 
-        # Nút xóa nhanh
-        self.clear_btn = tk.Button(self.input_frame, text="Clear", command=self.clear_inputs, font=("Segoe UI", 10))
-        self.clear_btn.pack(pady=2)
+        # Buttons for clearing and saving
+        button_frame = tk.Frame(self.input_frame, bg="#E6E6FA")
+        button_frame.pack(pady=2)
+        self.clear_btn = tk.Button(button_frame, text="Clear", command=self.clear_inputs, font=("Segoe UI", 10))
+        self.clear_btn.pack(side=tk.LEFT, padx=5)
+        self.save_btn = tk.Button(button_frame, text="Save Results", command=self.save_results, font=("Segoe UI", 10), bg="#FFD700")
+        self.save_btn.pack(side=tk.LEFT, padx=5)
 
-        # Frame nhập trạng thái đích
+        # Frame for goal state input
         self.goal_frame = tk.LabelFrame(self.root, text="Goal State", font=("Segoe UI", 12, "bold"), bg="#E6E6FA")
-        self.goal_frame.pack(pady=5)
+        self.goal_frame.pack(pady=5, padx=10, fill=tk.X)
         self.goal_state_entries = self.create_grid(self.goal_frame)
 
-        # Nút chạy thuật toán
+        # Run button
         tk.Button(self.root, text="Run Search", font=("Segoe UI", 12, "bold"), bg="#4CAF50", fg="white", command=self.run_search).pack(pady=5)
 
-        # Khung kết quả có thanh cuộn
+        # Frame for displaying results
         result_frame = tk.LabelFrame(self.root, text="Solution Steps", font=("Segoe UI", 12, "bold"), bg="#E6E6FA")
         result_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         self.result_canvas = tk.Canvas(result_frame, bg="#FFFFFF")
@@ -189,6 +201,7 @@ class UnifiedPuzzleApp:
         self.result_inner.bind("<Configure>", lambda e: self.result_canvas.configure(scrollregion=self.result_canvas.bbox("all")))
 
     def toggle_mode(self, event=None):
+        """Toggle between AND-OR Search and Belief Search input modes."""
         if self.mode_var.get() == "Belief Search":
             for row in self.initial_state_entries:
                 for e in row:
@@ -203,6 +216,7 @@ class UnifiedPuzzleApp:
                     e.grid(row=i, column=j, padx=2, pady=2)
 
     def create_grid(self, parent):
+        """Create a 3x3 grid for state input."""
         entries = []
         frame = tk.Frame(parent, bg="#E6E6FA")
         frame.pack()
@@ -216,6 +230,7 @@ class UnifiedPuzzleApp:
         return entries
 
     def clear_inputs(self):
+        """Clear all input fields and results."""
         for row in self.initial_state_entries:
             for e in row:
                 e.delete(0, tk.END)
@@ -227,55 +242,26 @@ class UnifiedPuzzleApp:
             widget.destroy()
 
     def get_grid_state(self, entries):
+        """Retrieve state from a 3x3 grid."""
         state = []
         try:
             for row in entries:
                 for e in row:
-                    state.append(int(e.get()))
+                    val = e.get().strip()
+                    if not val:
+                        raise ValueError("Empty cell detected")
+                    state.append(int(val))
             if sorted(state) != list(range(9)):
-                raise ValueError
+                raise ValueError("State must contain numbers 0-8 exactly once")
             return tuple(state)
-        except:
-            messagebox.showerror("Error", "Invalid grid state (must contain 0-8 uniquely)")
+        except ValueError as e:
+            messagebox.showerror("Error", f"Invalid grid state: {str(e)}")
             return None
 
-    def run_search(self):
-        for widget in self.result_inner.winfo_children():
-            widget.destroy()
-
-        goal = self.get_grid_state(self.goal_state_entries)
-        if not goal:
-            return
-
-        if self.mode_var.get() == "AND-OR Search":
-            start = self.get_grid_state(self.initial_state_entries)
-            if not start:
-                return
-            path, expansions, computation_time = and_or_search(start, goal)
-            if path:
-                for idx, state in enumerate(path):
-                    self.display_state(state, idx)
-            messagebox.showinfo("Done", f"Expansions: {expansions}\nComputation Time: {computation_time:.4f}s")
-
-        else:
-            try:
-                states = eval(self.initial_states_text.get("1.0", tk.END).strip())
-                if not isinstance(states, list) or not all(isinstance(s, tuple) and len(s) == 9 for s in states):
-                    raise ValueError
-                beliefs, path, expansions, computation_time = and_or_belief_search(set(states), goal)
-                if path:
-                    for idx, state in enumerate(path):
-                        self.display_state(state, idx)
-                else:
-                    messagebox.showinfo("Result", "No solution found.")
-                self.display_beliefs(beliefs)
-                messagebox.showinfo("Done", f"Expansions: {expansions}\nComputation Time: {computation_time:.4f}s\nBeliefs found: {len(beliefs)}")
-            except Exception as e:
-                messagebox.showerror("Error", f"Invalid initial states format\n{e}")
-
     def display_state(self, state, step):
+        """Display a puzzle state in the results frame."""
         frame = tk.Frame(self.result_inner, bg="#FFFFFF", bd=1, relief=tk.SOLID)
-        frame.pack(pady=3)
+        frame.pack(pady=3, fill=tk.X)
         tk.Label(frame, text=f"Step {step}", font=("Segoe UI", 10, "bold"), bg="#FFFFFF").pack()
         for i in range(3):
             row_frame = tk.Frame(frame, bg="#FFFFFF")
@@ -288,9 +274,10 @@ class UnifiedPuzzleApp:
                 e.pack(side=tk.LEFT, padx=1, pady=1)
 
     def display_beliefs(self, possible_beliefs):
+        """Display belief states with their probabilities."""
         frame = tk.Frame(self.result_inner, bg="#F0F8FF", bd=1, relief=tk.SOLID)
-        frame.pack(pady=5)
-        tk.Label(frame, text="Các belief đã duyệt:", font=("Segoe UI", 10, "bold"), bg="#F0F8FF").pack()
+        frame.pack(pady=5, fill=tk.X)
+        tk.Label(frame, text="Visited Beliefs:", font=("Segoe UI", 10, "bold"), bg="#F0F8FF").pack()
         count = 0
         for belief in possible_beliefs:
             count += 1
@@ -307,7 +294,75 @@ class UnifiedPuzzleApp:
                     if j == 2:
                         row += f"   (p={prob:.2f})"
                     tk.Label(grid_frame, text=row, font=("Consolas", 9), bg="#F0F8FF").pack(anchor="w")
-                tk.Label(grid_frame, text="").pack()  # Khoảng cách
+                tk.Label(grid_frame, text="").pack()
+
+    def run_search(self):
+        """Run the selected search algorithm."""
+        global results
+        results = []  # Clear results before starting a new run
+        for widget in self.result_inner.winfo_children():
+            widget.destroy()
+
+        goal = self.get_grid_state(self.goal_state_entries)
+        if not goal:
+            return
+
+        if self.mode_var.get() == "AND-OR Search":
+            start = self.get_grid_state(self.initial_state_entries)
+            if not start:
+                return
+            path, expansions, computation_time = and_or_search(start, goal)
+            if path:
+                for idx, state in enumerate(path):
+                    self.display_state(state, idx)
+                # Append only if results list does not already contain this algorithm
+                if not any(r["Algorithm"] == "AND-OR Search" for r in results):
+                    results.append({
+                        "Algorithm": "AND-OR Search",
+                        "Steps/Expansions": expansions,
+                        "Time (s)": computation_time
+                    })
+            else:
+                messagebox.showinfo("Result", "No solution found.")
+            messagebox.showinfo("Done", f"Expansions: {expansions}\nComputation Time: {computation_time:.4f}s")
+
+        else:  # Belief Search
+            try:
+                states_input = self.initial_states_text.get("1.0", tk.END).strip()
+                if not states_input:
+                    raise ValueError("No initial states provided")
+                states = eval(states_input)
+                if not isinstance(states, list) or not all(isinstance(s, tuple) and len(s) == 9 for s in states):
+                    raise ValueError("States must be a list of tuples with 9 elements each")
+                for state in states:
+                    if not is_valid_state(state):
+                        raise ValueError(f"Invalid state detected: {state}")
+                beliefs, path, expansions, computation_time = and_or_belief_search(set(states), goal)
+                if path:
+                    for idx, state in enumerate(path):
+                        self.display_state(state, idx)
+                else:
+                    messagebox.showinfo("Result", "No solution found.")
+                self.display_beliefs(beliefs)
+                # Append only if results list does not already contain this algorithm
+                if not any(r["Algorithm"] == "Belief Search" for r in results):
+                    results.append({
+                        "Algorithm": "Belief Search",
+                        "Steps/Expansions": expansions,
+                        "Time (s)": computation_time
+                    })
+                messagebox.showinfo("Done", f"Expansions: {expansions}\nComputation Time: {computation_time:.4f}s\nBeliefs found: {len(beliefs)}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Invalid initial states format: {str(e)}")
+
+    def save_results(self):
+        """Save results to Excel using the shared utility function."""
+        global results
+        if not results:
+            messagebox.showwarning("Warning", "No results to save. Run an algorithm first.")
+            return
+        save_to_excel(results)
+        results = []  # Clear results after saving to prevent reuse
 
 if __name__ == "__main__":
     root = tk.Tk()
